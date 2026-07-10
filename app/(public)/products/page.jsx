@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default async function Product() {
+export default async function Page() {
     let todos = await fetch('https://jsonplaceholder.typicode.com/todos')
         .then(res => res.json());
     return (

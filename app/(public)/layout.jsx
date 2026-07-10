@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function PublicLayout({children}) {
+export default function Layout({children}) {
     return (
         <>
             <nav>

@@ -1,4 +1,4 @@
-export default async function Products({params}) {
+export default async function Page({params}) {
     const {slug} = await params;
     let todo = await fetch(`https://jsonplaceholder.typicode.com/todos/${slug[0]}`)
         .then(res => res.json());
