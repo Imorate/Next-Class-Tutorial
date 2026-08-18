@@ -1,0 +1,6 @@
+{
+  "cSpell.words": ["shadcn"],
+  "css.lint.unknownAtRules": "ignore",
+  "scss.lint.unknownAtRules": "ignore",
+  "less.lint.unknownAtRules": "ignore"
+}
