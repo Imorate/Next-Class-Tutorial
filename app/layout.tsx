@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@/components/theme-provider";
-import { SITE_EN_NAME } from "@/lib/constants";
+import { SITE_FA_NAME } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist_Mono, Inter, Vazirmatn } from "next/font/google";
@@ -16,8 +16,8 @@ const vazirmatn = Vazirmatn({
 });
 
 export const metadata: Metadata = {
-  title: { default: SITE_EN_NAME, template: `%s | ${SITE_EN_NAME}` },
-  description: "NextJS final project",
+  title: { default: SITE_FA_NAME, template: `%s | ${SITE_FA_NAME}` },
+  description: "پروژه نهایی Nextjs",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
