@@ -1,2 +1,5 @@
-export const SITE_EN_NAME = "NextShop";
-export const SITE_FA_NAME = "نکست شاپ";
+export const SITE_CONFIG = {
+  name: "NextShop",
+  farsiName: "نکست شاپ",
+  description: "پروژه نهایی Nextjs",
+} as const;
