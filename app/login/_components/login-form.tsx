@@ -35,7 +35,7 @@ export function LoginForm({
             </div>
             <Field>
               <FieldLabel htmlFor="email">ایمیل</FieldLabel>
-              <Input id="email" type="email" required />
+              <Input id="email" type="email" autoComplete="off" required />
             </Field>
             <Field>
               <div className="flex items-center">
