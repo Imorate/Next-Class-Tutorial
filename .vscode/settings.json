@@ -3,5 +3,5 @@
   "css.lint.unknownAtRules": "ignore",
   "scss.lint.unknownAtRules": "ignore",
   "less.lint.unknownAtRules": "ignore",
-  "conventionalCommits.scopes": ["login"]
+  "conventionalCommits.scopes": ["login", "signup"]
 }
