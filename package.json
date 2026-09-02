@@ -26,6 +26,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@hookform/devtools": "^4.4.0",
     "@tailwindcss/postcss": "^4.3.3",
     "@tanstack/eslint-plugin-query": "^5.102.8",
     "@tanstack/react-query-devtools": "^5.102.8",
@@ -38,5 +39,5 @@
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3"
   },
-  "packageManager": "pnpm@11.24.0"
+  "packageManager": "pnpm@11.25.0"
 }
