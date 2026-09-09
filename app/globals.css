@@ -133,3 +133,7 @@
     @apply font-sans;
   }
 }
+
+[data-sonner-toast] {
+  font-family: var(--default-font-family);
+}
