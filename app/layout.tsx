@@ -1,4 +1,5 @@
 import Providers from "@/app/providers";
+import { Toaster } from "@/components/ui/sonner";
 import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
@@ -40,6 +41,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );
