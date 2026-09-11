@@ -43,7 +43,6 @@ export async function apiClient<T>(
     try {
       errorBody = await response.json();
     } catch {}
-    console.log(errorBody);
 
     throw new ApiError(
       errorBody?.message ?? `Request failed with status ${response.status}`,
