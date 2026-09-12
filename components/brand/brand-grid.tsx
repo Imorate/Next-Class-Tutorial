@@ -14,11 +14,11 @@ export default async function BrandGrid() {
   const brands = brandsCollectionResponse.data;
   return (
     <Carousel opts={{ align: "start", direction: "rtl" }} className="w-full">
-      <CarouselContent className="-ml-2">
+      <CarouselContent className="-ms-2">
         {brands.map((brand) => (
           <CarouselItem
             key={brand._id}
-            className="pl-2 py-4 md:pl-4 basis-1/3 sm:basis-1/4 lg:basis-1/5 xl:basis-1/6"
+            className="px-2 py-4 basis-1/2 sm:basis-1/3 lg:basis-1/5 xl:basis-1/6"
           >
             <Link
               href={`/brand/${brand._id}`}
