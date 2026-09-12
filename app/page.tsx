@@ -1,4 +1,4 @@
-import BrandGrid from "@/components/brand/brand-grid";
+import BrandsCarousel from "@/components/brand/brands-carousel";
 import { CarouselSkeleton } from "@/components/skeleton/CarouselSkeleton";
 import { Tag } from "lucide-react";
 import { Metadata } from "next";
@@ -20,7 +20,7 @@ export default function Home() {
           <p className="text-muted-foreground">لیست برند های موجود</p>
         </header>
         <Suspense fallback={<CarouselSkeleton />}>
-          <BrandGrid />
+          <BrandsCarousel />
         </Suspense>
       </section>
     </main>

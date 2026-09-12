@@ -9,7 +9,7 @@ import { getBrands } from "@/features/brand/brand.api";
 import Image from "next/image";
 import Link from "next/link";
 
-export default async function BrandGrid() {
+export default async function BrandsCarousel() {
   const brandsCollectionResponse = await getBrands();
   const brands = brandsCollectionResponse.data;
   return (
