@@ -10,6 +10,11 @@ const nextConfig: NextConfig = {
         hostname: "images.samsung.com",
         pathname: "/is/image/samsung/assets/global/about-us/brand/logo/**",
       },
+      {
+        protocol: "https",
+        hostname: "www.technolife.com",
+        pathname: "/image/**",
+      },
     ],
   },
 };

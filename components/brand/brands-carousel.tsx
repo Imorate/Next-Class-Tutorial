@@ -8,10 +8,14 @@ import {
 import { getBrands } from "@/features/brand/brand.api";
 import Image from "next/image";
 import Link from "next/link";
+import EmptyCarousel from "../carousel/empty-carousel";
 
 export default async function BrandsCarousel() {
   const brandsCollectionResponse = await getBrands();
-  const brands = brandsCollectionResponse.data;
+  const brands = brandsCollectionResponse.data ?? [];
+  if (brands.length === 0) {
+    return <EmptyCarousel />;
+  }
   return (
     <Carousel opts={{ align: "start", direction: "rtl" }} className="w-full">
       <CarouselContent className="-ms-2">
