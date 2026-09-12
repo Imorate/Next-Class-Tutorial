@@ -1,8 +1,5 @@
-export type Brand = {
-  _id: string;
+import { BaseResponse } from "@/features/common/base-response.type";
+export interface Brand extends BaseResponse {
   name: string;
   logo: string;
-  createdAt: string;
-  updatedAt: string;
-};
-export type BrandsResponse = { data: Brand[] };
+}

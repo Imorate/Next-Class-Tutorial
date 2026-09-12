@@ -1,11 +1,8 @@
+import { Brand } from "@/features/brand/brand.type";
+import { BaseCollectionResponse } from "@/features/common/base-response.type";
 import { ApiError } from "@/lib/api/types";
-import { cacheLife, cacheTag } from "next/cache";
-import { BrandsResponse } from "./brand.type";
 
-export async function getBrands(): Promise<BrandsResponse> {
-  "use cache";
-  cacheLife("days");
-  cacheTag("brands");
+export async function getBrands(): Promise<BaseCollectionResponse<Brand>> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/brand`,
   );
