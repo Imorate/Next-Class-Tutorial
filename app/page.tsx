@@ -1,8 +1,15 @@
 import BrandsCarousel from "@/components/brand/brands-carousel";
 import { CarouselSkeleton } from "@/components/carousel/carousel-skeleton";
 import CategoriesCarousel from "@/components/category/categories-carousel";
+import ProductCategoryCarousel from "@/components/product/product-category-carousel";
 import SaleProductsCarousel from "@/components/product/sale-products-carousel";
-import { BadgePercent, TableOfContents, Tag } from "lucide-react";
+import {
+  BadgePercent,
+  Laptop,
+  Smartphone,
+  TableOfContents,
+  Tag,
+} from "lucide-react";
 import { Metadata } from "next";
 import { Suspense } from "react";
 
@@ -20,7 +27,7 @@ export default function Home() {
             محصولات تخفیف خورده
           </p>
         </header>
-        <Suspense fallback={<CarouselSkeleton />}>
+        <Suspense fallback={<CarouselSkeleton heightClassName="h-84" />}>
           <SaleProductsCarousel />
         </Suspense>
       </section>
@@ -44,6 +51,30 @@ export default function Home() {
         </header>
         <Suspense fallback={<CarouselSkeleton />}>
           <BrandsCarousel />
+        </Suspense>
+      </section>
+      <section>
+        <header className="mb-1">
+          <p className="text-xl font-bold inline-flex items-center gap-2">
+            <Laptop />
+            محصولات لپ تاپ
+          </p>
+        </header>
+        <Suspense fallback={<CarouselSkeleton heightClassName="h-84" />}>
+          <ProductCategoryCarousel category="laptop" />
+        </Suspense>
+      </section>
+      <section>
+        <header className="mb-1">
+          <p className="text-xl font-bold inline-flex items-center gap-2">
+            <Smartphone />
+            محصولات گوشی همراه
+          </p>
+        </header>
+        <Suspense fallback={<CarouselSkeleton heightClassName="h-84" />}>
+          <div className="w-auto">
+            <ProductCategoryCarousel category="mobile" />
+          </div>
         </Suspense>
       </section>
     </main>
