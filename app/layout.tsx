@@ -1,4 +1,5 @@
 import Providers from "@/app/providers";
+import Navbar from "@/components/navbar/navbar";
 import { Toaster } from "@/components/ui/sonner";
 import { SITE_CONFIG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -40,7 +41,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       )}
     >
       <body className="min-h-full flex flex-col">
-        <Providers>{children}</Providers>
+        <Providers>
+          <Navbar />
+          <main className="min-h-[calc(100svh-4rem)]">{children}</main>
+        </Providers>
         <Toaster />
       </body>
     </html>
