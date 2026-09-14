@@ -8,7 +8,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { getCategoryProducts } from "@/features/product/product.api";
-import { Product } from "@/features/product/product.type";
+import { hasDiscount } from "@/features/product/product.utils";
 import { formatPrice, getPriceWithDiscount } from "@/lib/utils";
 import { Percent } from "lucide-react";
 import Image from "next/image";
@@ -27,10 +27,6 @@ export default async function CategoryProductCarousel({
     return <EmptyCarousel />;
   }
 
-  function hasDiscount(product: Product): boolean {
-    return product.sale ? true : false;
-  }
-
   return (
     <Carousel opts={{ align: "start", direction: "rtl" }} className="w-full">
       <CarouselContent className="-ms-2">
@@ -40,7 +36,7 @@ export default async function CategoryProductCarousel({
             className="px-2 py-4 basis-1/2 sm:basis-1/3 lg:basis-1/5 xl:basis-1/6"
           >
             <Link
-              href={`/product/${product._id}`}
+              href={`/products/${product._id}`}
               className="group block overflow-hidden rounded-md border bg-card transition-shadow duration-300 hover:shadow-md"
             >
               <div className="relative h-50 w-full overflow-hidden">

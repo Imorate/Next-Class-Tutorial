@@ -25,7 +25,7 @@ export default async function BrandsCarousel() {
             className="px-2 py-4 basis-1/2 sm:basis-1/3 lg:basis-1/5 xl:basis-1/6"
           >
             <Link
-              href={`/brand/${brand._id}`}
+              href={`/brands/${brand._id}`}
               className="group block overflow-hidden rounded-md border bg-card transition-shadow duration-300 hover:shadow-md"
             >
               <div className="relative h-20 w-full overflow-hidden">
