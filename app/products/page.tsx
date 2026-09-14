@@ -16,7 +16,7 @@ import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "محصولات",
-  description: "صفحه اصلی فروشگاه",
+  description: "صفحه محصولات فروشگاه",
 };
 
 export default async function ProductsPage() {
