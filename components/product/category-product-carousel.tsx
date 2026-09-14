@@ -7,21 +7,21 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { getProducts } from "@/features/product/product.api";
+import { getCategoryProducts } from "@/features/product/product.api";
 import { Product } from "@/features/product/product.type";
 import { formatPrice, getPriceWithDiscount } from "@/lib/utils";
 import { Percent } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-interface ProductCategoryCarouselProps {
+interface CategoryProductCarouselProps {
   category: string;
 }
 
-export default async function ProductCategoryCarousel({
+export default async function CategoryProductCarousel({
   category,
-}: ProductCategoryCarouselProps) {
-  const categoryProducts = await getProducts(category);
+}: CategoryProductCarouselProps) {
+  const categoryProducts = await getCategoryProducts(category);
   const products = categoryProducts.products ?? [];
   if (products.length === 0) {
     return <EmptyCarousel />;

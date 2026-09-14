@@ -1,7 +1,7 @@
 import BrandsCarousel from "@/components/brand/brands-carousel";
 import { CarouselSkeleton } from "@/components/carousel/carousel-skeleton";
 import CategoriesCarousel from "@/components/category/categories-carousel";
-import ProductCategoryCarousel from "@/components/product/product-category-carousel";
+import CategoryProductCarousel from "@/components/product/category-product-carousel";
 import SaleProductsCarousel from "@/components/product/sale-products-carousel";
 import {
   BadgePercent,
@@ -61,7 +61,7 @@ export default function Home() {
           </p>
         </header>
         <Suspense fallback={<CarouselSkeleton heightClassName="h-84" />}>
-          <ProductCategoryCarousel category="laptop" />
+          <CategoryProductCarousel category="laptop" />
         </Suspense>
       </section>
       <section>
@@ -73,7 +73,7 @@ export default function Home() {
         </header>
         <Suspense fallback={<CarouselSkeleton heightClassName="h-84" />}>
           <div className="w-auto">
-            <ProductCategoryCarousel category="mobile" />
+            <CategoryProductCarousel category="mobile" />
           </div>
         </Suspense>
       </section>

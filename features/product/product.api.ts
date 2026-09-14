@@ -1,5 +1,5 @@
 import { BaseCollectionResponse } from "@/features/common/base-response.type";
-import { ProductCategoryCollection } from "@/features/product/product-category.type";
+import { CategoryProductCollection } from "@/features/product/category-product.type";
 import { Product } from "@/features/product/product.type";
 import { ApiError } from "@/lib/api/types";
 
@@ -18,9 +18,22 @@ export async function getSaleProducts(): Promise<
   return response.json();
 }
 
-export async function getProducts(
+export async function getProducts(): Promise<BaseCollectionResponse<Product>> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/product`,
+    {
+      cache: "no-store",
+    },
+  );
+  if (!response.ok) {
+    throw new ApiError("Failed to fetch products", response.status);
+  }
+  return response.json();
+}
+
+export async function getCategoryProducts(
   category: string,
-): Promise<ProductCategoryCollection> {
+): Promise<CategoryProductCollection> {
   if (!category) {
     throw new Error("Illegal argument category");
   }
