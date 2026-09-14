@@ -21,12 +21,22 @@ export async function getSaleProducts(): Promise<
 export async function getProducts(): Promise<BaseCollectionResponse<Product>> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/product`,
-    {
-      cache: "no-store",
-    },
   );
   if (!response.ok) {
     throw new ApiError("Failed to fetch products", response.status);
+  }
+  return response.json();
+}
+
+export async function getProduct(id: string): Promise<Product> {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/product/${id}`,
+    {
+      cache: "force-cache",
+    },
+  );
+  if (!response.ok) {
+    throw new ApiError(`Failed to fetch product[id=${id}]`, response.status);
   }
   return response.json();
 }
