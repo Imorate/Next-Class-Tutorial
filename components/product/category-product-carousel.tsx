@@ -62,7 +62,7 @@ export default async function CategoryProductCarousel({
                     </span>
                   </Badge>
                 )}
-                <div className="flex flex-col">
+                <div className="flex flex-col ms-auto">
                   {hasDiscount(product) && (
                     <div className="text-sm flex justify-center gap-1">
                       <span>
