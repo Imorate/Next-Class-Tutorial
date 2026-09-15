@@ -28,24 +28,20 @@ export async function POST(request: NextRequest) {
     if (!backendResponse.ok) {
       return NextResponse.json(data, { status: backendResponse.status });
     }
-
+    console.log(backendResponse);
     const response = NextResponse.json({
       message: data.message,
       authorized: data.authorized,
       user: data.user,
     } as LoginResponse);
 
-    const cookieExpiryTime = new Date(Date.now() + 24 * 60 * 60 * 1000);
-
-    response.cookies.set({
-      name: "token",
-      value: data.token,
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      expires: cookieExpiryTime,
-    });
+    const setCookie = backendResponse.headers.get("set-cookie");
+    let expires;
+    if (setCookie) {
+      response.headers.set("token", setCookie);
+      const expiresMatch = setCookie.match(/Expires=([^;]+)/i);
+      expires = expiresMatch ? new Date(expiresMatch[1]) : undefined;
+    }
 
     response.cookies.set({
       name: "user",
@@ -54,7 +50,7 @@ export async function POST(request: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      expires: cookieExpiryTime,
+      expires: expires ?? new Date(Date.now() + 24 * 60 * 60 * 1000),
     });
 
     return response;
