@@ -35,14 +35,7 @@ export async function POST(request: NextRequest) {
       user: data.user,
     } as LoginResponse);
 
-    const setCookie = backendResponse.headers.get("set-cookie");
-    let expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
-    if (setCookie) {
-      const expiresMatch = setCookie.match(/Expires=([^;]+)/i);
-      if (expiresMatch) {
-        expires = new Date(expiresMatch[1]);
-      }
-    }
+    const expires = getJwtExpiration(data.token);
 
     response.cookies.set({
       name: "token",
@@ -51,7 +44,7 @@ export async function POST(request: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      expires: expires,
+      ...(expires && { expires }),
     });
 
     response.cookies.set({
@@ -61,7 +54,7 @@ export async function POST(request: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      expires,
+      ...(expires && { expires }),
     });
 
     return response;
@@ -74,4 +67,10 @@ export async function POST(request: NextRequest) {
       { status: 500 },
     );
   }
+}
+
+function getJwtExpiration(token: string) {
+  const payload = token.split(".")[1];
+  const decoded = JSON.parse(Buffer.from(payload, "base64url").toString());
+  return decoded.exp ? new Date(decoded.exp * 1000) : undefined;
 }
