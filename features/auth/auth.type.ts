@@ -26,3 +26,8 @@ export interface SessionResponse {
     id: string;
   };
 }
+
+export interface MeResponse {
+  authorized: boolean;
+  user: User | null;
+}
