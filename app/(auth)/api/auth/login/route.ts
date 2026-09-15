@@ -36,11 +36,13 @@ export async function POST(request: NextRequest) {
     } as LoginResponse);
 
     const setCookie = backendResponse.headers.get("set-cookie");
-    let expires;
+    let expires = new Date(Date.now() + 24 * 60 * 60 * 1000);
     if (setCookie) {
       response.headers.set("token", setCookie);
       const expiresMatch = setCookie.match(/Expires=([^;]+)/i);
-      expires = expiresMatch ? new Date(expiresMatch[1]) : undefined;
+      if (expiresMatch) {
+        expires = new Date(expiresMatch[1]);
+      }
     }
 
     response.cookies.set({
@@ -50,7 +52,7 @@ export async function POST(request: NextRequest) {
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
       path: "/",
-      expires: expires ?? new Date(Date.now() + 24 * 60 * 60 * 1000),
+      expires,
     });
 
     return response;
