@@ -7,6 +7,7 @@ export interface ApiErrorResponse {
 export interface ApiRequestOptions extends Omit<RequestInit, "body"> {
   params?: Record<string, string | number | boolean | undefined>;
   body?: unknown;
+  useBaseUrl?: boolean;
 }
 
 export class ApiError extends Error {

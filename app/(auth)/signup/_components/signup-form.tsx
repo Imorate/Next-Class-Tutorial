@@ -97,15 +97,12 @@ export function SignupForm({
       <form onSubmit={form.handleSubmit(onSubmit)} noValidate>
         <FieldGroup>
           <div className="flex flex-col items-center gap-2 text-center">
-            <a
-              href="#"
-              className="flex flex-col items-center gap-2 font-medium"
-            >
+            <div className="flex flex-col items-center gap-2 font-medium">
               <div className="flex size-10 items-center justify-center rounded-md">
                 <UserKey className="size-10" />
               </div>
               <span className="sr-only">{SITE_CONFIG.farsiName}</span>
-            </a>
+            </div>
             <h1 className="text-xl font-bold">
               ثبت نام در {SITE_CONFIG.farsiName}
             </h1>

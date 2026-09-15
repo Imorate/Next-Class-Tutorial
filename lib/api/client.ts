@@ -10,9 +10,11 @@ export async function apiClient<T>(
   endpoint: string,
   options: ApiRequestOptions = {},
 ): Promise<T> {
-  const { params, body, ...fetchOptions } = options;
+  const { useBaseUrl = true, params, body, ...fetchOptions } = options;
 
-  const url = new URL(endpoint, NEXT_PUBLIC_API_BASE_URL);
+  const url = useBaseUrl
+    ? new URL(endpoint, NEXT_PUBLIC_API_BASE_URL)
+    : new URL(endpoint, window.location.origin);
 
   if (params) {
     for (const [key, value] of Object.entries(params)) {

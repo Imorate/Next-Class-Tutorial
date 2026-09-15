@@ -4,6 +4,15 @@ import { Menu, User } from "lucide-react";
 import Link from "next/link";
 
 import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
@@ -16,6 +25,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { SITE_CONFIG } from "@/lib/constants";
+import { Button } from "@base-ui/react";
 
 const navigationItems = [
   {
@@ -54,15 +64,7 @@ export default function Navbar() {
           </NavigationMenuList>
         </NavigationMenu>
         <div className="flex">
-          <div className="flex items-center gap-1">
-            <Link
-              href="/account"
-              aria-label="حساب کاربری"
-              className="inline-flex h-10 w-10 items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground"
-            >
-              <User className="h-5 w-5" />
-            </Link>
-          </div>
+          <div className="flex items-center gap-1">{userProfile()}</div>
           <div className="md:hidden">
             <Sheet>
               <SheetTrigger
@@ -71,12 +73,10 @@ export default function Navbar() {
               >
                 <Menu className="h-5 w-5" />
               </SheetTrigger>
-
               <SheetContent side="right">
                 <SheetHeader>
                   <SheetTitle>منو</SheetTitle>
                 </SheetHeader>
-
                 <nav className="mt-6 flex flex-col gap-2">
                   {navigationItems.map((item) => (
                     <Link
@@ -94,5 +94,31 @@ export default function Navbar() {
         </div>
       </div>
     </header>
+  );
+}
+
+function userProfile() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger
+        render={
+          <Button className="inline-flex h-10 w-10 items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+            <User className="h-5 w-5" />
+          </Button>
+        }
+      />
+      <DropdownMenuContent align="end">
+        <DropdownMenuGroup>
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuItem>Profile</DropdownMenuItem>
+          <DropdownMenuItem>Billing</DropdownMenuItem>
+          <DropdownMenuItem>Settings</DropdownMenuItem>
+        </DropdownMenuGroup>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>GitHub</DropdownMenuItem>
+        <DropdownMenuItem>Support</DropdownMenuItem>
+        <DropdownMenuItem disabled>API</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

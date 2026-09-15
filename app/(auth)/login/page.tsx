@@ -5,11 +5,15 @@ export const metadata: Metadata = {
   title: "ورود",
 };
 
-export default function LoginPage() {
+export default async function LoginPage({ searchParams }: PageProps<"/login">) {
+  const params = await searchParams;
+  const callbackUrl = Array.isArray(params.callbackUrl)
+    ? params.callbackUrl[0]
+    : params.callbackUrl;
   return (
     <div className="flex min-h-full flex-col items-center justify-center gap-6 bg-background p-6 md:p-10">
       <div className="w-full max-w-md">
-        <LoginForm />
+        <LoginForm callbackUrl={callbackUrl} />
       </div>
     </div>
   );
