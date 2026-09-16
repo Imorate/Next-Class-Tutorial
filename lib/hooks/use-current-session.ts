@@ -7,5 +7,6 @@ export function useCurrentSession() {
   return useQuery({
     queryKey: ["auth"],
     queryFn: getCurrentSession,
+    retry: false,
   });
 }
