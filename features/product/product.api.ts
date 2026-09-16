@@ -21,6 +21,12 @@ export async function getSaleProducts(): Promise<
 export async function getProducts(): Promise<BaseCollectionResponse<Product>> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/product`,
+    {
+      next: {
+        revalidate: 300,
+        tags: ["products"],
+      },
+    },
   );
   if (!response.ok) {
     throw new ApiError("Failed to fetch products", response.status);
