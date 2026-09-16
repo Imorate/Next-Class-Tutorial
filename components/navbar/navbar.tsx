@@ -57,7 +57,7 @@ export default function Navbar() {
             </Button>
           }
         />
-        <DropdownMenuContent align="end" className="w-56">
+        <DropdownMenuContent align="end">
           <DropdownMenuGroup>
             <DropdownMenuLabel className="font-normal">
               <div className="flex flex-col gap-1">
