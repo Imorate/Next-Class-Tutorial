@@ -102,7 +102,9 @@ export default async function ProductsPage() {
                       </div>
                     )}
                     <div className="text-sm flex justify-center gap-1">
-                      <span className="line-through">
+                      <span
+                        className={hasDiscount(product) ? "line-through" : ""}
+                      >
                         {formatPrice(product.price)}
                       </span>
                       <span>تومان</span>
