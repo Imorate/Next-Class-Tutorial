@@ -21,7 +21,9 @@ export async function getCurrentSession(): Promise<string | null> {
       `${NEXT_PUBLIC_API_BASE_URL}/api/auth/session`,
       {
         method: "GET",
-        credentials: "include",
+        headers: {
+          Cookie: `token=${token}`,
+        },
         cache: "no-store",
       },
     );
