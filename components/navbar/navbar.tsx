@@ -9,6 +9,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -78,15 +79,23 @@ export default function Navbar() {
                 </DropdownMenuItem>
               </>
             ) : (
-              <DropdownMenuItem>
-                <Button
-                  className="w-100 text-right"
-                  disabled={logoutMutation.isPending}
-                  onClick={() => logoutMutation.mutate()}
-                >
-                  خروج
-                </Button>
-              </DropdownMenuItem>
+              <>
+                <DropdownMenuItem>
+                  <Link href="/dashboard" className="w-100">
+                    داشبورد
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <Button
+                    className="w-100 text-right"
+                    disabled={logoutMutation.isPending}
+                    onClick={() => logoutMutation.mutate()}
+                  >
+                    خروج
+                  </Button>
+                </DropdownMenuItem>
+              </>
             )}
           </DropdownMenuGroup>
         </DropdownMenuContent>
