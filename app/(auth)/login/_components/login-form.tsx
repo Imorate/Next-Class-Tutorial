@@ -52,7 +52,7 @@ export function LoginForm({
     mutationKey: ["auth", "login"],
     mutationFn: login,
     onSuccess: () => {
-      toast.success("ثبت نام با موفقیت انجام شد", {
+      toast.success("ورود با موفقیت انجام شد", {
         duration: 1500,
       });
       setTimeout(() => {
