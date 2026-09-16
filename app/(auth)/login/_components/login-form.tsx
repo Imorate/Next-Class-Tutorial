@@ -19,7 +19,7 @@ import {
   loginApiRequestSchema,
 } from "@/lib/validation/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { LogIn } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -36,6 +36,7 @@ export function LoginForm({
   ...props
 }: LoginFormProps) {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const LOGIN_FIELDS = ["email", "password"] as const;
   type LoginField = (typeof LOGIN_FIELDS)[number];
   const DEFAULT_LOGIN_VALUES: LoginApiRequest = {
@@ -49,14 +50,18 @@ export function LoginForm({
     reValidateMode: "onChange",
   });
   const loginMutation = useMutation({
-    mutationKey: ["auth", "login"],
+    mutationKey: ["auth"],
     mutationFn: login,
-    onSuccess: () => {
+    onSuccess: async () => {
       toast.success("ورود با موفقیت انجام شد", {
         duration: 1500,
       });
+      await queryClient.invalidateQueries({
+        queryKey: ["auth"],
+      });
       setTimeout(() => {
-        router.push(callbackUrl ?? "/");
+        router.replace(callbackUrl ?? "/");
+        router.refresh();
       }, 1500);
     },
     onError: (error) => {

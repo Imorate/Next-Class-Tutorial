@@ -1,10 +1,6 @@
 export interface SignupResponse {
   message: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-  };
+  user: User;
 }
 
 export interface User {
@@ -22,12 +18,11 @@ export interface LoginResponse {
 
 export interface SessionResponse {
   authorized: boolean;
-  session?: {
+  session: {
     id: string;
   };
 }
 
-export interface MeResponse {
-  authorized: boolean;
-  user: User | null;
+export interface LogoutResponse {
+  message?: string;
 }

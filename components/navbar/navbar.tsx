@@ -9,7 +9,6 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -25,6 +24,8 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { SITE_CONFIG } from "@/lib/constants";
+import { useCurrentSession } from "@/lib/hooks/use-current-session";
+import { useLogout } from "@/lib/hooks/use-logout";
 import { Button } from "@base-ui/react";
 
 const navigationItems = [
@@ -43,6 +44,55 @@ const navigationItems = [
 ];
 
 export default function Navbar() {
+  const { data: userId } = useCurrentSession();
+  const logoutMutation = useLogout();
+
+  function userProfile() {
+    return (
+      <DropdownMenu>
+        <DropdownMenuTrigger
+          render={
+            <Button className="h-10 w-10 p-2 inline-flex gap-2 items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
+              <User className="h-5 w-5" />
+            </Button>
+          }
+        />
+        <DropdownMenuContent align="end" className="w-56">
+          <DropdownMenuGroup>
+            <DropdownMenuLabel className="font-normal">
+              <div className="flex flex-col gap-1">
+                <span className="font-medium">حساب کاربری</span>
+              </div>
+            </DropdownMenuLabel>
+            {!userId ? (
+              <>
+                <DropdownMenuItem>
+                  <Link href="/login" className="w-100">
+                    ورود
+                  </Link>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Link href="/signup" className="w-100">
+                    ثبت نام
+                  </Link>
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <DropdownMenuItem>
+                <Button
+                  className="w-100 text-right"
+                  disabled={logoutMutation.isPending}
+                  onClick={() => logoutMutation.mutate()}
+                >
+                  خروج
+                </Button>
+              </DropdownMenuItem>
+            )}
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    );
+  }
   return (
     <header className="sticky h-16 top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="container mx-auto flex h-16 items-center justify-between">
@@ -94,31 +144,5 @@ export default function Navbar() {
         </div>
       </div>
     </header>
-  );
-}
-
-function userProfile() {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger
-        render={
-          <Button className="inline-flex h-10 w-10 items-center justify-center rounded-md text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground">
-            <User className="h-5 w-5" />
-          </Button>
-        }
-      />
-      <DropdownMenuContent align="end">
-        <DropdownMenuGroup>
-          <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuItem>Profile</DropdownMenuItem>
-          <DropdownMenuItem>Billing</DropdownMenuItem>
-          <DropdownMenuItem>Settings</DropdownMenuItem>
-        </DropdownMenuGroup>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>GitHub</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
-        <DropdownMenuItem disabled>API</DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
   );
 }

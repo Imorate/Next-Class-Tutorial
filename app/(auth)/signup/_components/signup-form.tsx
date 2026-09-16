@@ -52,7 +52,7 @@ export function SignupForm({
   });
 
   const signupMutation = useMutation({
-    mutationKey: ["auth", "signup"],
+    mutationKey: ["auth"],
     mutationFn: signup,
     onSuccess: () => {
       toast.success("ثبت نام با موفقیت انجام شد", {

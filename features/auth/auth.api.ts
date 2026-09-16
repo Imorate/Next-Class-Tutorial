@@ -1,4 +1,9 @@
-import { LoginResponse, SignupResponse } from "@/features/auth/auth.type";
+import {
+  LoginResponse,
+  LogoutResponse,
+  SessionResponse,
+  SignupResponse,
+} from "@/features/auth/auth.type";
 import { apiClient } from "@/lib/api/client";
 import {
   LoginApiRequest,
@@ -19,9 +24,24 @@ export async function signup(data: SignupFormValues): Promise<SignupResponse> {
 
 export async function login(data: LoginApiRequest): Promise<LoginResponse> {
   const loginApiRequest = loginApiRequestSchema.parse(data);
-  return apiClient("/api/auth/login", {
+  return apiClient("/api/auth/sign-in", {
     method: "POST",
     body: loginApiRequest,
-    useBaseUrl: false,
+    credentials: "include",
+  });
+}
+
+export async function getCurrentSession(): Promise<string> {
+  const response = await apiClient<SessionResponse>("/api/auth/session", {
+    method: "GET",
+    credentials: "include",
+  });
+  return response.session.id;
+}
+
+export async function logout(): Promise<LogoutResponse> {
+  return apiClient("/api/auth/sign-out", {
+    method: "DELETE",
+    credentials: "include",
   });
 }

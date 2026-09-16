@@ -1,10 +1,10 @@
-import { getCurrentUser } from "@/features/auth/auth-current-user";
+import { getCurrentSession } from "@/features/auth/auth-current-user";
 import { redirect } from "next/navigation";
 
 export default async function DashboardPage() {
-  const user = await getCurrentUser();
-  if (!user) {
+  const userId = await getCurrentSession();
+  if (!userId) {
     redirect("/login");
   }
-  return <div>{user?.email}</div>;
+  return <div>{userId}</div>;
 }
