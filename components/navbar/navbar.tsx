@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, User } from "lucide-react";
+import { LayoutDashboard, LogOutIcon, Menu, User } from "lucide-react";
 import Link from "next/link";
 
 import {
@@ -81,17 +81,19 @@ export default function Navbar() {
             ) : (
               <>
                 <DropdownMenuItem>
-                  <Link href="/dashboard" className="w-100">
+                  <Link href="/dashboard" className="w-100 inline-flex gap-1">
+                    <LayoutDashboard />
                     داشبورد
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem variant="destructive">
                   <Button
-                    className="w-100 text-right"
+                    className="w-100 text-right inline-flex gap-1"
                     disabled={logoutMutation.isPending}
                     onClick={() => logoutMutation.mutate()}
                   >
+                    <LogOutIcon />
                     خروج
                   </Button>
                 </DropdownMenuItem>
@@ -108,7 +110,7 @@ export default function Navbar() {
         <Link href="/" className="text-lg font-bold tracking-tight">
           {SITE_CONFIG.farsiName}
         </Link>
-        <NavigationMenu className="hidden md:flex">
+        <NavigationMenu align="end" className="hidden md:flex">
           <NavigationMenuList className="gap-1">
             {navigationItems.map((item) => (
               <NavigationMenuItem key={item.href}>
@@ -132,7 +134,7 @@ export default function Navbar() {
               >
                 <Menu className="h-5 w-5" />
               </SheetTrigger>
-              <SheetContent side="right">
+              <SheetContent side="left">
                 <SheetHeader>
                   <SheetTitle>منو</SheetTitle>
                 </SheetHeader>
