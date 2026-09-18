@@ -1,9 +1,17 @@
+"use server";
+
 import { BaseCollectionResponse } from "@/features/common/base-response.type";
+import {
+  ProductFormValues,
+  productSchema,
+} from "@/features/product/product.schema";
 import {
   CategoryProductCollection,
   Product,
 } from "@/features/product/product.type";
 import { ApiError } from "@/lib/api/types";
+import { refresh, revalidateTag } from "next/cache";
+import { cookies } from "next/headers";
 
 const NEXT_PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
 
@@ -62,5 +70,45 @@ export async function getCategoryProducts(
       response.status,
     );
   }
+  return response.json();
+}
+
+export async function createProduct(values: ProductFormValues) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const data = productSchema.parse(values);
+  const response = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/api/product`, {
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: `token=${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to create product");
+  }
+  revalidateTag("products", "max");
+  refresh();
+  return response.json();
+}
+
+export async function deleteProduct(id: string) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const response = await fetch(
+    `${NEXT_PUBLIC_API_BASE_URL}/api/product/${id}`,
+    {
+      method: "delete",
+      headers: {
+        Cookie: `token=${token}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error("Failed to delete product");
+  }
+  revalidateTag("products", "max");
+  refresh();
   return response.json();
 }

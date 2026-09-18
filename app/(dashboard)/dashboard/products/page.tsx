@@ -1,14 +1,14 @@
 import { ProductDatatable } from "@/components/product/product-datatable";
 import { columns } from "@/components/product/product-datatable-columns";
-import { getCurrentSession } from "@/features/auth/auth-current-session";
 import { getProducts } from "@/features/product/product.api";
-import { redirect } from "next/navigation";
+import { Metadata } from "next";
 
-export default async function DashboardPage() {
-  const sessionId = await getCurrentSession();
-  if (!sessionId) {
-    redirect("/login");
-  }
+export const metadata: Metadata = {
+  title: "محصول",
+  description: "صفحه مدیریت محصول",
+};
+
+export default async function ProductPage() {
   const productCollectionResponse = await getProducts();
   const products = productCollectionResponse.data ?? [];
 
