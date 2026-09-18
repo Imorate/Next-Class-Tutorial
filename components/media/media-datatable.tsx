@@ -4,6 +4,7 @@ import {
   features,
   type DataTableFeatures,
 } from "@/components/datatable/data-table-features";
+import { MediaDialog } from "@/components/media/media-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -61,7 +62,7 @@ export function MediaDatatable<TData extends RowData>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      <div className="flex items-center gap-5 py-4">
         <Input
           placeholder="فیلتر آدرس"
           value={(table.getColumn("url")?.getFilterValue() as string) ?? ""}
@@ -70,6 +71,7 @@ export function MediaDatatable<TData extends RowData>({
           }
           className="max-w-sm"
         />
+        <MediaDialog />
         <DropdownMenu>
           <DropdownMenuTrigger
             render={<Button variant="outline" className="mr-auto" />}

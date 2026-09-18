@@ -2,6 +2,7 @@
 
 import { DataTableColumnHeader } from "@/components/datatable/data-table-column-header";
 import { DataTableFeatures } from "@/components/datatable/data-table-features";
+import { DeleteMediaDialog } from "@/components/media/media-delete-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -55,8 +56,9 @@ export const columns = columnHelper.columns([
                 کپی
               </DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>ویرایش</DropdownMenuItem>
-              <DropdownMenuItem>حذف</DropdownMenuItem>
+              <DropdownMenuItem
+                render={<DeleteMediaDialog id={media._id} title={media.url} />}
+              ></DropdownMenuItem>
             </DropdownMenuGroup>
           </DropdownMenuContent>
         </DropdownMenu>
