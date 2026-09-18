@@ -14,6 +14,9 @@ import {
 
 const breadcrumbLabels: Record<string, string> = {
   dashboard: "داشبورد",
+  products: "محصولات",
+  categories: "دسته بندی ها",
+  brands: "برند ها",
   media: "رسانه",
 };
 
