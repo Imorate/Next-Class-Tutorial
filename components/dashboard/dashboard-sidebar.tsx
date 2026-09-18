@@ -1,9 +1,11 @@
 import * as React from "react";
 
+import DashboardFooter from "@/components/dashboard/dashboard-footer";
 import { Separator } from "@/components/ui/separator";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -85,6 +87,11 @@ export function DashboardSidebar({
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarFooter>
+        <div className="p-1">
+          <DashboardFooter />
+        </div>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
