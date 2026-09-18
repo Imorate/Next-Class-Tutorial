@@ -47,7 +47,7 @@ const nav: Navigation[] = [
       {
         id: "media",
         title: "رسانه",
-        url: "/dashboard/medias",
+        url: "/dashboard/media",
       },
     ],
   },

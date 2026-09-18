@@ -14,6 +14,7 @@ import {
 
 const breadcrumbLabels: Record<string, string> = {
   dashboard: "داشبورد",
+  media: "رسانه",
 };
 
 export function DashboardBreadcrumb() {
@@ -41,9 +42,11 @@ export function DashboardBreadcrumb() {
             {!breadcrumb.isLast && (
               <>
                 <BreadcrumbItem className="hidden md:block">
-                  <BreadcrumbLink>
-                    <Link href={breadcrumb.href}>{breadcrumb.label}</Link>
-                  </BreadcrumbLink>
+                  <BreadcrumbLink
+                    render={
+                      <Link href={breadcrumb.href}>{breadcrumb.label}</Link>
+                    }
+                  ></BreadcrumbLink>
                 </BreadcrumbItem>
 
                 <BreadcrumbSeparator className="hidden md:block" />
