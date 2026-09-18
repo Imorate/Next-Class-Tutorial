@@ -1,6 +1,8 @@
 import { BaseCollectionResponse } from "@/features/common/base-response.type";
-import { CategoryProductCollection } from "@/features/product/category-product.type";
-import { Product } from "@/features/product/product.type";
+import {
+  CategoryProductCollection,
+  Product,
+} from "@/features/product/product.type";
 import { ApiError } from "@/lib/api/types";
 
 export async function getSaleProducts(): Promise<
