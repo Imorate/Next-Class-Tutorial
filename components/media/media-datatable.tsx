@@ -35,7 +35,7 @@ interface DataTableProps<TData extends RowData> {
   data: TData[];
 }
 
-export function MediaTable<TData extends RowData>({
+export function MediaDatatable<TData extends RowData>({
   columns,
   data,
 }: DataTableProps<TData>) {
@@ -81,7 +81,6 @@ export function MediaTable<TData extends RowData>({
               .getAllColumns()
               .filter((column) => column.getCanHide())
               .map((column) => {
-                console.log(column);
                 return (
                   <DropdownMenuCheckboxItem
                     key={column.id}
