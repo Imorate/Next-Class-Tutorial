@@ -1,9 +1,29 @@
+import { DashboardBreadcrumb } from "@/components/dashboard/dashboard-breadcrumb";
+import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
+import { Separator } from "@/components/ui/separator";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
+
 export default function DashboardLayout({
   children,
 }: LayoutProps<"/dashboard">) {
   return (
-    <>
-      <main>{children}</main>
-    </>
+    <SidebarProvider>
+      <DashboardSidebar />
+      <SidebarInset>
+        <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+          <SidebarTrigger className="-ms-1" />
+          <Separator
+            orientation="vertical"
+            className="me-2 data-vertical:h-4 data-vertical:self-auto"
+          />
+          <DashboardBreadcrumb />
+        </header>
+        <main className="flex flex-1 flex-col gap-4 p-4">{children}</main>
+      </SidebarInset>
+    </SidebarProvider>
   );
 }
