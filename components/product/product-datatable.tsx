@@ -4,6 +4,7 @@ import {
   features,
   type DataTableFeatures,
 } from "@/components/datatable/data-table-features";
+import { ProductDialog } from "@/components/product/product-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -29,7 +30,6 @@ import {
   type RowData,
 } from "@tanstack/react-table";
 import React from "react";
-import { ProductDialog } from "./product-dialog";
 
 interface DataTableProps<TData extends RowData> {
   columns: ColumnDef<DataTableFeatures, TData>[];

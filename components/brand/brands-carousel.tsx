@@ -1,3 +1,4 @@
+import EmptyCarousel from "@/components/carousel/empty-carousel";
 import {
   Carousel,
   CarouselContent,
@@ -8,7 +9,6 @@ import {
 import { getBrands } from "@/features/brand/brand.api";
 import Image from "next/image";
 import Link from "next/link";
-import EmptyCarousel from "../carousel/empty-carousel";
 
 export default async function BrandsCarousel() {
   const brandsCollectionResponse = await getBrands();

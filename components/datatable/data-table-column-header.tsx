@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { type DataTableFeatures } from "./data-table-features";
+import { type DataTableFeatures } from "@/components/datatable/data-table-features";
 
 interface DataTableColumnHeaderProps<
   TData extends RowData,

@@ -1,11 +1,11 @@
 "use server";
 
+import { BrandFormValues, brandSchema } from "@/features/brand/brand.schema";
 import { Brand } from "@/features/brand/brand.type";
 import { BaseCollectionResponse } from "@/features/common/base-response.type";
 import { ApiError } from "@/lib/api/types";
 import { refresh, revalidateTag } from "next/cache";
 import { cookies } from "next/headers";
-import { BrandFormValues, brandSchema } from "./brand.schema";
 
 const NEXT_PUBLIC_API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL!;
 

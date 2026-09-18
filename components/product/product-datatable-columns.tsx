@@ -2,6 +2,7 @@
 
 import { DataTableColumnHeader } from "@/components/datatable/data-table-column-header";
 import { DataTableFeatures } from "@/components/datatable/data-table-features";
+import { DeleteProductDialog } from "@/components/product/product-delete-dialog";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,7 +16,6 @@ import {
 import { Product } from "@/features/product/product.type";
 import { createColumnHelper } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
-import { DeleteProductDialog } from "./product-delete-dialog";
 
 const columnHelper = createColumnHelper<DataTableFeatures, Product>();
 
