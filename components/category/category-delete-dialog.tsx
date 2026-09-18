@@ -12,19 +12,19 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { deleteBrand } from "@/features/brand/brand.api";
+import { deleteCategory } from "@/features/category/category.api";
 import { useMutation } from "@tanstack/react-query";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-interface DeleteBrandDialogProps {
+interface DeleteCategoryDialogProps {
   id: string;
   title: string;
 }
 
-export function DeleteBrandDialog({ id, title }: DeleteBrandDialogProps) {
+export function DeleteCategoryDialog({ id, title }: DeleteCategoryDialogProps) {
   const mutation = useMutation({
-    mutationFn: () => deleteBrand(id),
+    mutationFn: () => deleteCategory(id),
 
     onSuccess: async () => {},
     onError: () => {

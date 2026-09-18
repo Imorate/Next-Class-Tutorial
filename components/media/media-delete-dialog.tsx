@@ -47,7 +47,7 @@ export function DeleteMediaDialog({ id, title }: DeleteMediaDialogProps) {
           <AlertDialogTitle>حذف</AlertDialogTitle>
           <AlertDialogDescription>
             آیا مورد
-            <span className="mx-1 font-bold">{title}</span>
+            <span className="mx-1 font-bold"> {title} </span>
             حذف شود؟
           </AlertDialogDescription>
         </AlertDialogHeader>
