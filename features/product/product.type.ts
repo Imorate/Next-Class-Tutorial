@@ -11,3 +11,7 @@ export interface Product extends BaseResponse {
   category: Category;
   brand: Brand;
 }
+
+export interface CategoryProductCollection extends Category {
+  products: Product[];
+}

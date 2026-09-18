@@ -9,28 +9,46 @@ import {
 import { Card, CardContent } from "@/components/ui/card";
 import { getProduct } from "@/features/product/product.api";
 import { hasDiscount } from "@/features/product/product.utils";
+import { is4xx } from "@/lib/api/helper";
+import { ApiError } from "@/lib/api/types";
 import { formatPrice, getPriceWithDiscount } from "@/lib/utils";
 import { Percent } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export async function generateMetadata({
   params,
 }: PageProps<"/products/[id]">): Promise<Metadata> {
   const { id } = await params;
-  const product = await getProduct(id);
-  return {
-    title: product.name,
-    description: `صفحه محصول ${product.name}`,
-  };
+  try {
+    const product = await getProduct(id);
+    return {
+      title: product.name,
+      description: `صفحه محصول ${product.name}`,
+    };
+  } catch {
+    return {
+      title: "محصول یافت نشد",
+    };
+  }
 }
 
 export default async function ProductPage({
   params,
 }: PageProps<"/products/[id]">) {
   const { id } = await params;
-  const product = await getProduct(id);
+  let product;
+  try {
+    product = await getProduct(id);
+  } catch (e) {
+    if (e instanceof ApiError && is4xx(e.status)) {
+      notFound();
+    } else {
+      return <p>خطایی رخ داده است</p>;
+    }
+  }
   return (
     <main className="container mx-auto px-4 py-8">
       {getBreadcrumb(product.name)}

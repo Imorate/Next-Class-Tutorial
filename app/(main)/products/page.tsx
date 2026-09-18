@@ -1,18 +1,13 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Empty,
-  EmptyHeader,
-  EmptyMedia,
-  EmptyTitle,
-} from "@/components/ui/empty";
 import { getProducts } from "@/features/product/product.api";
 import { hasDiscount } from "@/features/product/product.utils";
 import { formatPrice, getPriceWithDiscount } from "@/lib/utils";
-import { Percent, ShoppingCart } from "lucide-react";
+import { Percent } from "lucide-react";
 import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { notFound } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "محصولات",
@@ -23,16 +18,7 @@ export default async function ProductsPage() {
   const ProductCollectionResponse = await getProducts();
   const products = ProductCollectionResponse.data ?? [];
   if (products.length === 0) {
-    return (
-      <Empty>
-        <EmptyHeader>
-          <EmptyMedia variant="icon">
-            <ShoppingCart />
-          </EmptyMedia>
-          <EmptyTitle>محصولی یافت نشد</EmptyTitle>
-        </EmptyHeader>
-      </Empty>
-    );
+    notFound();
   }
 
   return (
