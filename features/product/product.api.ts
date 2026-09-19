@@ -93,6 +93,29 @@ export async function createProduct(values: ProductFormValues) {
   return response.json();
 }
 
+export async function updateProduct(id: string, values: ProductFormValues) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const data = productSchema.parse(values);
+  const response = await fetch(
+    `${NEXT_PUBLIC_API_BASE_URL}/api/product/${id}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `token=${token}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update product");
+  }
+  revalidateTag("products", "max");
+  refresh();
+  return response.json();
+}
+
 export async function deleteProduct(id: string) {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;

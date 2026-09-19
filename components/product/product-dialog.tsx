@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import { createProduct } from "@/features/product/product.api";
+import { createProduct, updateProduct } from "@/features/product/product.api";
 import {
   ProductFormInput,
   ProductFormValues,
@@ -26,43 +26,66 @@ import { Product } from "@/features/product/product.type";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Pencil, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import ControlledDialogProps from "../dialog/ControlledDialogProps";
 
-interface ProductDialogProps {
+interface ProductDialogProps extends ControlledDialogProps {
   product?: Product;
 }
 
-export function ProductDialog({ product }: ProductDialogProps) {
-  const [open, setOpen] = useState(false);
+export function ProductDialog({
+  product,
+  open: controlledOpen,
+  onOpenChange,
+}: ProductDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
   const isEdit = Boolean(product);
 
   const form = useForm<ProductFormInput, unknown, ProductFormValues>({
     resolver: zodResolver(productSchema),
     mode: "onTouched",
     reValidateMode: "onChange",
-    defaultValues: {
-      name: "",
-      price: 0,
-      sale: 0,
-      media: [],
-      category: "",
-      brand: "",
-    },
+    defaultValues: product
+      ? {
+          name: product.name,
+          price: product.price,
+          sale: product.sale,
+          media: product.media.map((item) => item._id),
+          category: product.category._id,
+          brand: product.brand._id,
+        }
+      : {
+          name: "",
+          price: 0,
+          sale: 0,
+          media: [],
+          category: "",
+          brand: "",
+        },
   });
 
-  useEffect(() => {
-    if (open) {
-      form.reset();
+  function handleOpenChange(value: boolean) {
+    if (!isControlled) {
+      setInternalOpen(value);
     }
-  }, [open, product, form]);
+    onOpenChange?.(value);
+  }
 
   const mutation = useMutation({
-    mutationFn: createProduct,
+    mutationFn: (value: ProductFormValues) => {
+      if (product) {
+        return updateProduct(product._id, value);
+      }
+      return createProduct(value);
+    },
 
     onSuccess: async () => {
-      setOpen(false);
+      toast.success("عملیات با موفقیت انجام شد");
+      handleOpenChange(false);
       form.reset();
     },
 
@@ -76,18 +99,20 @@ export function ProductDialog({ product }: ProductDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <Button type="button" variant="outline" size="icon">
-            {isEdit ? (
-              <Pencil className="h-4 w-4" />
-            ) : (
-              <Plus className="h-4 w-4" />
-            )}
-          </Button>
-        }
-      />
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      {!isControlled && (
+        <DialogTrigger
+          render={
+            <Button type="button" variant="outline" size="icon">
+              {isEdit ? (
+                <Pencil className="h-4 w-4" />
+              ) : (
+                <Plus className="h-4 w-4" />
+              )}
+            </Button>
+          }
+        />
+      )}
 
       <DialogContent>
         <DialogHeader>
@@ -126,7 +151,10 @@ export function ProductDialog({ product }: ProductDialogProps) {
                     id={field.name}
                     type="number"
                     min={0}
-                    onChange={(event) => field.onChange(event.target.value)}
+                    value={field.value as number}
+                    onChange={(event) => {
+                      field.onChange(event.target.value);
+                    }}
                     onBlur={field.onBlur}
                     disabled={mutation.isPending}
                     aria-invalid={fieldState.invalid}
@@ -148,6 +176,7 @@ export function ProductDialog({ product }: ProductDialogProps) {
                     type="number"
                     min={0}
                     max={100}
+                    value={field.value as number}
                     disabled={mutation.isPending}
                     aria-invalid={fieldState.invalid}
                     onChange={(event) => field.onChange(event.target.value)}
