@@ -56,6 +56,26 @@ export async function createBrand(values: BrandFormValues) {
   return response.json();
 }
 
+export async function updateBrand(id: string, values: BrandFormValues) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const data = brandSchema.parse(values);
+  const response = await fetch(`${NEXT_PUBLIC_API_BASE_URL}/api/brand/${id}`, {
+    method: "PUT",
+    body: JSON.stringify(data),
+    headers: {
+      "Content-Type": "application/json",
+      Cookie: `token=${token}`,
+    },
+  });
+  if (!response.ok) {
+    throw new Error("Failed to update brand");
+  }
+  revalidateTag("brands", "max");
+  refresh();
+  return response.json();
+}
+
 export async function deleteBrand(id: string) {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;

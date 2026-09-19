@@ -1,5 +1,6 @@
 "use client";
 
+import ControlledDialogProps from "@/components/dialog/ControlledDialogProps";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,39 +10,48 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { deleteBrand } from "@/features/brand/brand.api";
 import { useMutation } from "@tanstack/react-query";
-import { Trash2 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 
-interface DeleteBrandDialogProps {
+interface DeleteAlertDialogProps extends ControlledDialogProps {
   id: string;
   title: string;
+  deleteFn: (id: string) => Promise<unknown>;
 }
 
-export function DeleteBrandDialog({ id, title }: DeleteBrandDialogProps) {
-  const mutation = useMutation({
-    mutationFn: () => deleteBrand(id),
+export function DeleteAlertDialog({
+  id,
+  title,
+  open: controlledOpen,
+  onOpenChange,
+  deleteFn,
+}: DeleteAlertDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
 
-    onSuccess: async () => {},
+  function handleOpenChange(value: boolean) {
+    if (!isControlled) {
+      setInternalOpen(value);
+    }
+    onOpenChange?.(value);
+  }
+
+  const mutation = useMutation({
+    mutationFn: () => deleteFn(id),
+    onSuccess: () => {
+      toast.success("عملیات با موفقیت انجام شد");
+      handleOpenChange(false);
+    },
     onError: () => {
       toast.error("خطایی رخ داده است");
     },
   });
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger
-        render={
-          <Button type="button" variant="destructive" size="icon">
-            <Trash2 className="h-4 w-4" />
-          </Button>
-        }
-      ></AlertDialogTrigger>
-
+    <AlertDialog open={open} onOpenChange={handleOpenChange}>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>حذف</AlertDialogTitle>

@@ -1,5 +1,6 @@
 "use client";
 
+import ControlledDialogProps from "@/components/dialog/ControlledDialogProps";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,30 +17,33 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import { createBrand } from "@/features/brand/brand.api";
+import { createBrand, updateBrand } from "@/features/brand/brand.api";
 import { BrandFormValues, brandSchema } from "@/features/brand/brand.schema";
 import { Brand } from "@/features/brand/brand.type";
 import { ApiError } from "@/lib/api/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Pencil, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-interface BrandDialogProps {
+interface BrandDialogProps extends ControlledDialogProps {
   brand?: Brand;
 }
 
-export function BrandDialog({ brand }: BrandDialogProps) {
-  const [open, setOpen] = useState(false);
+export function BrandDialog({
+  brand,
+  open: controlledOpen,
+  onOpenChange,
+}: BrandDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+
   const isEdit = Boolean(brand);
   const FIELDS = ["name", "logo"] as const;
   type FormField = (typeof FIELDS)[number];
-  const DEFAULT_VALUES: BrandFormValues = {
-    name: "",
-    logo: "",
-  };
 
   function isFormField(field: string): field is FormField {
     return FIELDS.includes(field as FormField);
@@ -49,20 +53,30 @@ export function BrandDialog({ brand }: BrandDialogProps) {
     resolver: zodResolver(brandSchema),
     mode: "onTouched",
     reValidateMode: "onChange",
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: {
+      name: brand?.name ?? "",
+      logo: brand?.logo ?? "",
+    },
   });
 
-  useEffect(() => {
-    if (open) {
-      form.reset();
+  function handleOpenChange(value: boolean) {
+    if (!isControlled) {
+      setInternalOpen(value);
     }
-  }, [open, brand, form]);
+    onOpenChange?.(value);
+  }
 
   const mutation = useMutation({
-    mutationFn: createBrand,
+    mutationFn: (value: BrandFormValues) => {
+      if (brand) {
+        return updateBrand(brand._id, value);
+      }
+      return createBrand(value);
+    },
 
     onSuccess: async () => {
-      setOpen(false);
+      toast.success("عملیات با موفقیت انجام شد");
+      handleOpenChange(false);
       form.reset();
     },
 
@@ -71,18 +85,15 @@ export function BrandDialog({ brand }: BrandDialogProps) {
       if (!(error instanceof ApiError)) {
         return;
       }
-      if (error.fieldErrors) {
-        for (const [field, messages] of Object.entries(error.fieldErrors)) {
-          if (isFormField(field)) {
-            form.setError(
-              field,
-              {
-                type: "server",
-                message: messages[0],
-              },
-              { shouldFocus: true },
-            );
-          }
+      if (!error.fieldErrors) {
+        return;
+      }
+      for (const [field, messages] of Object.entries(error.fieldErrors)) {
+        if (isFormField(field)) {
+          form.setError(field, {
+            type: "server",
+            message: messages[0],
+          });
         }
       }
     },
@@ -93,18 +104,20 @@ export function BrandDialog({ brand }: BrandDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <Button type="button" variant="outline" size="icon">
-            {isEdit ? (
-              <Pencil className="h-4 w-4" />
-            ) : (
-              <Plus className="h-4 w-4" />
-            )}
-          </Button>
-        }
-      />
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      {!isControlled && (
+        <DialogTrigger
+          render={
+            <Button type="button" variant="outline" size="icon">
+              {isEdit ? (
+                <Pencil className="h-4 w-4" />
+              ) : (
+                <Plus className="h-4 w-4" />
+              )}
+            </Button>
+          }
+        />
+      )}
 
       <DialogContent>
         <DialogHeader>
