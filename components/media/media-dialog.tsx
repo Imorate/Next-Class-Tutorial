@@ -23,22 +23,27 @@ import { ApiError } from "@/lib/api/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Pencil, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
+import ControlledDialogProps from "../dialog/ControlledDialogProps";
 
-interface MediaDialogProps {
+interface MediaDialogProps extends ControlledDialogProps {
   media?: Media;
 }
 
-export function MediaDialog({ media }: MediaDialogProps) {
-  const [open, setOpen] = useState(false);
+export function MediaDialog({
+  media,
+  open: controlledOpen,
+  onOpenChange,
+}: MediaDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
+
   const isEdit = Boolean(media);
   const FIELDS = ["url"] as const;
   type FormField = (typeof FIELDS)[number];
-  const DEFAULT_VALUES: MediaFormValues = {
-    url: "",
-  };
 
   function isFormField(field: string): field is FormField {
     return FIELDS.includes(field as FormField);
@@ -48,20 +53,24 @@ export function MediaDialog({ media }: MediaDialogProps) {
     resolver: zodResolver(mediaSchema),
     mode: "onTouched",
     reValidateMode: "onChange",
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: {
+      url: media?.url ?? "",
+    },
   });
 
-  useEffect(() => {
-    if (open) {
-      form.reset();
+  function handleOpenChange(value: boolean) {
+    if (!isControlled) {
+      setInternalOpen(value);
     }
-  }, [open, media, form]);
+    onOpenChange?.(value);
+  }
 
   const mutation = useMutation({
     mutationFn: createMedia,
 
     onSuccess: async () => {
-      setOpen(false);
+      toast.success("عملیات با موفقیت انجام شد");
+      handleOpenChange(false);
       form.reset();
     },
 
@@ -70,18 +79,15 @@ export function MediaDialog({ media }: MediaDialogProps) {
       if (!(error instanceof ApiError)) {
         return;
       }
-      if (error.fieldErrors) {
-        for (const [field, messages] of Object.entries(error.fieldErrors)) {
-          if (isFormField(field)) {
-            form.setError(
-              field,
-              {
-                type: "server",
-                message: messages[0],
-              },
-              { shouldFocus: true },
-            );
-          }
+      if (!error.fieldErrors) {
+        return;
+      }
+      for (const [field, messages] of Object.entries(error.fieldErrors)) {
+        if (isFormField(field)) {
+          form.setError(field, {
+            type: "server",
+            message: messages[0],
+          });
         }
       }
     },
@@ -92,18 +98,20 @@ export function MediaDialog({ media }: MediaDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <Button type="button" variant="outline" size="icon">
-            {isEdit ? (
-              <Pencil className="h-4 w-4" />
-            ) : (
-              <Plus className="h-4 w-4" />
-            )}
-          </Button>
-        }
-      />
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      {!isControlled && (
+        <DialogTrigger
+          render={
+            <Button type="button" variant="outline" size="icon">
+              {isEdit ? (
+                <Pencil className="h-4 w-4" />
+              ) : (
+                <Plus className="h-4 w-4" />
+              )}
+            </Button>
+          }
+        />
+      )}
 
       <DialogContent>
         <DialogHeader>
