@@ -59,6 +59,29 @@ export async function createCategory(values: CategoryFormValues) {
   return response.json();
 }
 
+export async function updateCategory(id: string, values: CategoryFormValues) {
+  const cookieStore = await cookies();
+  const token = cookieStore.get("token")?.value;
+  const data = categorySchema.parse(values);
+  const response = await fetch(
+    `${NEXT_PUBLIC_API_BASE_URL}/api/category/${id}`,
+    {
+      method: "PUT",
+      body: JSON.stringify(data),
+      headers: {
+        "Content-Type": "application/json",
+        Cookie: `token=${token}`,
+      },
+    },
+  );
+  if (!response.ok) {
+    throw new Error("Failed to update category");
+  }
+  revalidateTag("categories", "max");
+  refresh();
+  return response.json();
+}
+
 export async function deleteCategory(id: string) {
   const cookieStore = await cookies();
   const token = cookieStore.get("token")?.value;

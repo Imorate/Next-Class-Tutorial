@@ -1,5 +1,6 @@
 "use client";
 
+import ControlledDialogProps from "@/components/dialog/ControlledDialogProps";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -16,7 +17,10 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
-import { createCategory } from "@/features/category/category.api";
+import {
+  createCategory,
+  updateCategory,
+} from "@/features/category/category.api";
 import {
   CategoryFormValues,
   categorySchema,
@@ -26,24 +30,26 @@ import { ApiError } from "@/lib/api/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation } from "@tanstack/react-query";
 import { Pencil, Plus } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-interface CategoryDialogProps {
+interface CategoryDialogProps extends ControlledDialogProps {
   category?: Category;
 }
 
-export function CategoryDialog({ category }: CategoryDialogProps) {
-  const [open, setOpen] = useState(false);
+export function CategoryDialog({
+  category,
+  open: controlledOpen,
+  onOpenChange,
+}: CategoryDialogProps) {
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isControlled = controlledOpen !== undefined;
+  const open = isControlled ? controlledOpen : internalOpen;
   const isEdit = Boolean(category);
+
   const FIELDS = ["name", "en_name", "image"] as const;
   type FormField = (typeof FIELDS)[number];
-  const DEFAULT_VALUES: CategoryFormValues = {
-    name: "",
-    en_name: "",
-    image: "",
-  };
 
   function isFormField(field: string): field is FormField {
     return FIELDS.includes(field as FormField);
@@ -53,20 +59,31 @@ export function CategoryDialog({ category }: CategoryDialogProps) {
     resolver: zodResolver(categorySchema),
     mode: "onTouched",
     reValidateMode: "onChange",
-    defaultValues: DEFAULT_VALUES,
+    defaultValues: {
+      name: category?.name ?? "",
+      en_name: category?.en_name ?? "",
+      image: category?.image ?? "",
+    },
   });
 
-  useEffect(() => {
-    if (open) {
-      form.reset();
+  function handleOpenChange(value: boolean) {
+    if (!isControlled) {
+      setInternalOpen(value);
     }
-  }, [open, category, form]);
+    onOpenChange?.(value);
+  }
 
   const mutation = useMutation({
-    mutationFn: createCategory,
+    mutationFn: (value: CategoryFormValues) => {
+      if (category) {
+        return updateCategory(category._id, value);
+      }
+      return createCategory(value);
+    },
 
     onSuccess: async () => {
-      setOpen(false);
+      toast.success("عملیات با موفقیت انجام شد");
+      handleOpenChange(false);
       form.reset();
     },
 
@@ -75,18 +92,15 @@ export function CategoryDialog({ category }: CategoryDialogProps) {
       if (!(error instanceof ApiError)) {
         return;
       }
-      if (error.fieldErrors) {
-        for (const [field, messages] of Object.entries(error.fieldErrors)) {
-          if (isFormField(field)) {
-            form.setError(
-              field,
-              {
-                type: "server",
-                message: messages[0],
-              },
-              { shouldFocus: true },
-            );
-          }
+      if (!error.fieldErrors) {
+        return;
+      }
+      for (const [field, messages] of Object.entries(error.fieldErrors)) {
+        if (isFormField(field)) {
+          form.setError(field, {
+            type: "server",
+            message: messages[0],
+          });
         }
       }
     },
@@ -97,18 +111,20 @@ export function CategoryDialog({ category }: CategoryDialogProps) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger
-        render={
-          <Button type="button" variant="outline" size="icon">
-            {isEdit ? (
-              <Pencil className="h-4 w-4" />
-            ) : (
-              <Plus className="h-4 w-4" />
-            )}
-          </Button>
-        }
-      />
+    <Dialog open={open} onOpenChange={handleOpenChange}>
+      {!isControlled && (
+        <DialogTrigger
+          render={
+            <Button type="button" variant="outline" size="icon">
+              {isEdit ? (
+                <Pencil className="h-4 w-4" />
+              ) : (
+                <Plus className="h-4 w-4" />
+              )}
+            </Button>
+          }
+        />
+      )}
 
       <DialogContent>
         <DialogHeader>
